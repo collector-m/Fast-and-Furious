@@ -1,5 +1,5 @@
 __pycache__/
-argoverse-api/*
+/argoverse-api/*
 argoverse-tracking/*
 *.pickle
 *.pyc 
