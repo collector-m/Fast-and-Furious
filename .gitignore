@@ -3,3 +3,6 @@ __pycache__/
 argoverse-tracking/*
 *.pickle
 *.pyc 
+*.icloud
+*.ipynb
+FaF_env/*

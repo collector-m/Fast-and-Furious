@@ -31,6 +31,7 @@ def create_occupancy_grids(cloud_dict, resolution=0.2, Xsize=144, Ysize=80, bins
     deleted_keys = []
     for k, v in cloud_dict.items():
         #try:
+        print(k)
         cloud_dict[k] = point_cloud_projection_utils.form_voxel_slice_img(regionX, regionY, v, num_slices=bins, zmin=minHeight, zmax=maxHeight)
         #except:
             #deleted_keys.append(k)
