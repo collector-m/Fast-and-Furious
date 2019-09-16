@@ -10,13 +10,14 @@ class EarlyFusion(nn.Module):
     
     def generate_features(self):
         layers = []
-        in_channels = 5
-        layers += [nn.Conv1d(in_channels, kernel_size=5)]
+        in_channels = 29
+        layers += [nn.Conv1d(in_channels=5, out_channels=1, kernel_size=5), nn.ReLU(inplace=True)]
         for v in self.configs:
             if v == 'M':
                 layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
             else:
                 layers += [nn.Conv2d(in_channels, v, kernel_size=3, padding=1), nn.ReLU(inplace=True)]
+                in_channels = v
         return nn.Sequential(*layers)
     
     def forward(self, x):

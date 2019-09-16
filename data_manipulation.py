@@ -31,8 +31,7 @@ def create_occupancy_grids(cloud_dict, resolution=0.2, Xsize=144, Ysize=80, bins
     deleted_keys = []
     for k, v in cloud_dict.items():
         #try:
-        print(k)
-        cloud_dict[k] = point_cloud_projection_utils.form_voxel_slice_img(regionX, regionY, v, num_slices=bins, zmin=minHeight, zmax=maxHeight)
+        cloud_dict[k] = point_cloud_projection_utils.form_voxel_slice_img(regionY, regionX, v, num_slices=bins, zmin=minHeight, zmax=maxHeight)
         #except:
             #deleted_keys.append(k)
     for k in deleted_keys:
@@ -55,15 +54,15 @@ def visualize_point_cloud(cloud_dict):
     mayavi_wrapper.mlab.show()
 
 # Stack 5 Occupancy grids and sort by timestamp
-
+'''
 cloud_dict = load_all_clouds()
 cloud_dict = perform_SE3(cloud_dict)
 cloud_dict = create_occupancy_grids(cloud_dict)
-'''
+
 save_occupancy_grids(cloud_dict)
+'''
 loaded = load_occupancy_grids()
 for k, v in loaded.items():
     break
 plt.imshow(v[:,:,0], cmap='gray')
 plt.show()
-'''

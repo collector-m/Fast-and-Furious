@@ -25,6 +25,12 @@ def form_voxel_slice_img(img_h, img_w, point_cloud, num_slices=35, zmin=-2.5, zm
 	"""
 	x_vals = np.round(point_cloud[:,0]).astype(np.int64)
 	y_vals = np.round(point_cloud[:,1]).astype(np.int64)
+	x_vals = np.logical_and(0 <= x_vals, x_vals <= img_w)
+	y_vals = np.logical_and(0 <= y_vals, y_vals <= img_h)
+	xy_vals = np.logical_and(x_vals, y_vals)
+	point_cloud = point_cloud[xy_vals]
+	x_vals = np.round(point_cloud[:,0]).astype(np.int64)
+	y_vals = np.round(point_cloud[:,1]).astype(np.int64)
 	z_vals = point_cloud[:,2]
 	img = np.zeros((img_h, img_w, num_slices), dtype=np.uint8)
 
@@ -41,7 +47,6 @@ def form_voxel_slice_img(img_h, img_w, point_cloud, num_slices=35, zmin=-2.5, zm
 		y = y_vals[z_is_valid]
 		x = x_vals[z_is_valid]
 		img[y,x,z_plane_idx] = 1
-
 	return img
 
 

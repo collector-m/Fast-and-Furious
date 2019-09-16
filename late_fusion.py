@@ -15,8 +15,10 @@ class LateFusion(nn.Module):
         for i, v in enumerate(self.configs):
             if v == 'M':
                 layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
-            elif i == 1 or i == 4:
-                layers += [nn.Conv3d(), nn.ReLU(inplace=True)]
+            elif i == 1:
+                layers += [nn.Conv3d(in_channels=5, out_channels=3, kernel_size=3), nn.ReLU(inplace=True)]
+            elif i == 4:
+                layers += [nn.Conv3d(in_channels=3, out_channels=1, kernel_size=3), nn.ReLU(inplace=True)]
             else:
                 layers += [nn.Conv2d(in_channels, v, kernel_size=3, padding=1), nn.ReLU(inplace=True)]
         return nn.Sequential(*layers)
