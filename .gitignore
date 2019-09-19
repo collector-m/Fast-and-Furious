@@ -1,8 +1,11 @@
 __pycache__/
 /argoverse-api/*
-argoverse-tracking/*
+/argoverse-tracking/*
 *.pickle
 *.pyc 
 *.icloud
 *.ipynb
 FaF_env/*
+.DS_Store
+*.json
+*.ply
