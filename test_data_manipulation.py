@@ -4,9 +4,6 @@ import numpy as np
 
 
 class TestDataManipulation(unittest.TestCase):
-
-    
-
     def test_create_occupancy_grids(self):
         point_cloud = np.array([[1, 1, 2], [1, 1, 4], [3, 4, 3], [3, 3, 4], [2, 3, 1]])
         img_h = 5

@@ -24,14 +24,14 @@ def form_voxel_slice_img(img_h, img_w, point_cloud, num_slices=35, zmin=-2.5, zm
 	35 slices with bin size of 0.1 meter. One reflectance channel is also computed
 	As a result, our input representation has the dimension of 800 × 700 × 36.
 	"""
-    '''
+    """
     x_vals = np.round(point_cloud[:, 0]).astype(np.int64)
     y_vals = np.round(point_cloud[:, 1]).astype(np.int64)
     x_vals = np.logical_and(0 <= x_vals, x_vals <= img_w)
     y_vals = np.logical_and(0 <= y_vals, y_vals <= img_h)
     xy_vals = np.logical_and(x_vals, y_vals)
     point_cloud = point_cloud[xy_vals]
-    '''
+    """
     x_vals = np.round(point_cloud[:, 0]).astype(np.int64)
     y_vals = np.round(point_cloud[:, 1]).astype(np.int64)
     z_vals = point_cloud[:, 2]

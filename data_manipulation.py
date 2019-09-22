@@ -6,6 +6,7 @@ import point_cloud_projection_utils
 import matplotlib.pyplot as plt
 import os
 import pickle
+import torch
 
 LOG_ID = "c6911883-1843-3727-8eaa-41dc8cda8993"
 DATASET_DIR = "argoverse-tracking/sample"
@@ -27,12 +28,15 @@ def perform_SE3(cloud_dict, dataset=DATASET_DIR, log_id=LOG_ID):
         cloud_dict[k] = SE3.transform_point_cloud(v)
     return cloud_dict
 
+
 def group_and_SE3(cloud_dict, dataset=DATASET_DIR, log_id=LOG_ID):
     timestamps = []
     for key in sorted(cloud_dict.keys()):
         timestamps.append(key)
         if len(timestamps) == 5:
-            t0_to_map_SE3 = get_city_SE3_egovehicle_at_sensor_t(str(timestamps[0]), dataset, log_id)
+            t0_to_map_SE3 = get_city_SE3_egovehicle_at_sensor_t(
+                str(timestamps[0]), dataset, log_id
+            )
             map_to_t0_SE3 = t0_to_map_SE3.inverse()
             rotation = np.eye(3)
             translation = np.array([-72, -40, 0])
@@ -46,6 +50,7 @@ def group_and_SE3(cloud_dict, dataset=DATASET_DIR, log_id=LOG_ID):
     for ts in timestamps:
         del cloud_dict[ts]
     return cloud_dict
+
 
 def create_occupancy_grids(
     cloud_dict,
@@ -69,6 +74,18 @@ def create_occupancy_grids(
     for k in deleted_keys:
         del cloud_dict[k]
     return cloud_dict
+
+
+def stack_occupancy_grids(cloud_dict):
+    new_dict = {}
+    timestamps = []
+    for k in sorted(cloud_dict.keys()):
+        timestamps.append(k)
+        if len(timestamps) == 5:
+            tensors = [cloud_dict[ts] for ts in timestamps]
+            new_dict[timestamps[0]] = torch.from_numpy(np.stack(tensors, axis=3))
+            timestamps = timestamps[1:]
+    return new_dict
 
 
 def save_occupancy_grids(cloud_dict):
@@ -97,17 +114,7 @@ cloud_dict = load_all_clouds()
 cloud_dict = perform_SE3(cloud_dict)
 cloud_dict = group_and_SE3(cloud_dict)
 cloud_dict = create_occupancy_grids(cloud_dict)
-for k in sorted(cloud_dict.keys()):
-    print(cloud_dict[k])
-#visualize_point_cloud(cloud_dict)
-
-
-"""
+cloud_dict = stack_occupancy_grids(cloud_dict)
+#print(cloud_dict.keys())
+# visualize_point_cloud(cloud_dict)
 save_occupancy_grids(cloud_dict)
-
-loaded = load_occupancy_grids()
-for k, v in loaded.items():
-    break
-plt.imshow(v[:, :, 0], cmap="gray")
-plt.show()
-"""
